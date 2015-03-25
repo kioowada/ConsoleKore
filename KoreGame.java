@@ -15,7 +15,6 @@ public class KoreGame {
         initGame();
     }
 
-
     public void initGame() {
         player_one_cnt[0] = 1;
         player_one_cnt[1] = 1;
@@ -96,6 +95,57 @@ public class KoreGame {
                 throw new NoPlayerException();
         }
     }//}}}
+
+    public void divideOne(int which, int cnt) throws NoHandException, NotEnoughException {
+        if ((which != CNT_LEFT) && (which != CNT_RIGHT)) {
+            throw new NoHandException(1);
+        }
+
+        if (player_one_cnt[which] == 1) {
+            throw new NotEnoughException(which);
+        }
+
+        if (player_one_cnt[which] <= cnt) {
+            throw new NotEnoughException(which);
+        }
+
+        int alternative = (which+1)%2;
+
+        player_one_cnt[alternative] += cnt;
+        player_one_cnt[which] -= cnt;
+    }
+
+    public void divideTwo(int which, int cnt) throws NoHandException, NotEnoughException {
+        if ((which != CNT_LEFT) && (which != CNT_RIGHT)) {
+            throw new NoHandException(2);
+        }
+
+        if (player_two_cnt[which] == 1) {
+            throw new NotEnoughException(which);
+        }
+
+        if (player_two_cnt[which] <= cnt) {
+            throw new NotEnoughException(which);
+        }
+
+        int alternative = (which+1)%2;
+
+        player_two_cnt[alternative] += cnt;
+        player_two_cnt[which] -= cnt;
+    }
+
+    public void divide(int player, int which, int cnt) throws NoPlayerException, NotEnoughException, NoHandException {
+        switch (player) {
+            case 1:
+                divideOne(which, cnt);
+                break;
+            case 2:
+                divideTwo(which, cnt);
+                break;
+            default:
+                throw new NoPlayerException();
+        }
+    }
 
     public boolean isEnd() {
         if ((player_one_cnt[CNT_LEFT] == 0) && (player_one_cnt[CNT_RIGHT] == 0)) {
